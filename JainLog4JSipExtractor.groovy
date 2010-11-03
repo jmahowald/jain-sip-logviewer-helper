@@ -35,5 +35,19 @@ System.in.eachLine() { line->
 }
 
 
-println ("Found ${sipMessages.size()}  messages")
-sipMessages.each {println it}
+//Outputs the needed 'headers' for the tracesviewer
+String HEADER="""
+
+<!-- Use the  Trace Viewer in src/tools/tracesviewer to view this  trace
+	Here are the stack configuration properties
+	javax.sip.STACK_NAME= Mobicents-SIP-Servlets
+	-->
+<description logDescription="Mobicents-SIP-Servlets"  name="Mobicents-SIP-Servlets" auxInfo="null"/>
+"""
+sipMessages.each {sipMessage ->
+	println("<message>")
+	println sipMessage
+	println("</sipMessage")	
+}
+
+
