@@ -1,38 +1,43 @@
 /**
- * Usage groovy JainLog4JSipExtractor [regex_in_sip_to_search_for]
+ * Usage groovy JainLog4JSipExtractor -s [regex_in_sip_to_search_for] -v [regex_in_sip_to_exclude] < logfile > sipmessage.log
  */
 
-def inSipMessage = false
+def cli = new CliBuilder()
+cli.with {
+     usage: 'Self'
+	 s longOpt:'searchRegex', 'a regex to search for within a sip message for instance a particualr call id or particular ip',args:1
+	 v longOpt:'execludeRegex', 'a regex to ignore in sip messages, i.e. OPTIONS', args:1
+     h longOpt:'help', 'usage information'
+     i longOpt:'input', 'input file', args:1
+}
+def opt = cli.parse(args)
+
+if( opt.h ) {
+    cli.usage()
+    return
+}
+
+def input = System.in
+
+if( opt.i ) {
+	input = new File(opt.i)
+}
 def searchRegex = ".*"
-if(args.length > 0)
+if(opt.s)
 {
-	searchRegex = args[0]
+	searchRegex = opt.s
 }
+def excludeRegex
+if(opt.v)
+{
+	excludeRegex = opt.v
+}
+
+
+
+
+def inSipMessage = false
 def buff = new StringBuffer()
-
-def sipMessages = []
-
-
-System.in.eachLine() { line->
-	if(line =~ /<message/)
-	{
-		inSipMessage = true
-		buff = new StringBuffer()
-	}
-	else if(line =~ /<\/message/)
-	{
-		inSipMessage = false
-		
-		if(buff =~ searchRegex)
-		{
-			sipMessages << buff
-		}
-	}
-	else if(inSipMessage) {
-		buff.append(line + "\n")
-	}
-	
-}
 
 
 //Outputs the needed 'headers' for the tracesviewer
@@ -48,10 +53,30 @@ javax.sip.OUTBOUND_PROXY= null
 """
 
 println HEADER
-sipMessages.each {sipMessage ->
-	println("<message")
-	println sipMessage
-	println("</message>")	
+
+
+input.eachLine() { line->
+	if(line =~ /<message/)
+	{
+		inSipMessage = true
+		buff = new StringBuffer()
+	}
+	else if(line =~ /<\/message/)
+	{
+		inSipMessage = false
+		if(buff =~ searchRegex && !(excludeRegex && buff =~ excludeRegex))
+		{
+			println("<message")
+			println buff
+			println("</message>")
+		}
+	}
+	else if(inSipMessage) {
+		buff.append(line + "\n")
+	}
+	
 }
+
+
 
 
