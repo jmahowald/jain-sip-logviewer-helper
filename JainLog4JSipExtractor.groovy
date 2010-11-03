@@ -46,10 +46,12 @@ javax.sip.OUTBOUND_PROXY= null
 -->
 <description logDescription="Mobicents-SIP-Servlets"  name="Mobicents-SIP-Servlets" auxInfo="null"/>
 """
+
+println HEADER
 sipMessages.each {sipMessage ->
 	println("<message")
 	println sipMessage
-	println("</sipMessage")	
+	println("</message>")	
 }
 
 
