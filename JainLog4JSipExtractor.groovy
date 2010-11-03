@@ -37,15 +37,17 @@ System.in.eachLine() { line->
 
 //Outputs the needed 'headers' for the tracesviewer
 String HEADER="""
-
 <!-- Use the  Trace Viewer in src/tools/tracesviewer to view this  trace
-	Here are the stack configuration properties
-	javax.sip.STACK_NAME= Mobicents-SIP-Servlets
-	-->
+Here are the stack configuration properties
+javax.sip.IP_ADDRESS= null
+javax.sip.STACK_NAME= Mobicents-SIP-Servlets
+javax.sip.ROUTER_PATH= null
+javax.sip.OUTBOUND_PROXY= null
+-->
 <description logDescription="Mobicents-SIP-Servlets"  name="Mobicents-SIP-Servlets" auxInfo="null"/>
 """
 sipMessages.each {sipMessage ->
-	println("<message>")
+	println("<message")
 	println sipMessage
 	println("</sipMessage")	
 }
