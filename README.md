@@ -13,6 +13,9 @@ Installation
 
     `git clone https://github.com/jmahowald/jain-sip-logviewer-helper.git`
 
+  - Or 
+     `wget https://github.com/jmahowald/jain-sip-logviewer-helper/tarball/master`
+
 Usage
 ------------
 
